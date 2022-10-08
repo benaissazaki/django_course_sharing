@@ -16,8 +16,8 @@ bandit = "*"
 python_version = "3.10"
 
 [scripts]
-start = "manage.py runserver"
-test = "manage.py test"
+start = "python -m manage runserver"
+test = "python -m manage test"
 lint = "pylint --recursive=y ."
 format = "autopep8 -r --in-place ."
 scan = "bandit -r ."
