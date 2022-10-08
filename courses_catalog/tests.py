@@ -1,8 +1,8 @@
 import os
-import re
 from pathlib import Path
 from django.test import SimpleTestCase
 from django.template.loader import get_template
+from django.urls import reverse
 
 class TemplateTests(SimpleTestCase):
     def test_templates_correctly_set(self):
@@ -15,3 +15,19 @@ class TemplateTests(SimpleTestCase):
         for p in Path(templates_path).rglob('*'):
             if p.suffix == '.html':
                 get_template(p.relative_to(templates_path))
+
+class HomePageTests(SimpleTestCase):
+    def test_url_exists_at_correct_location(self):
+        ''' Verifies the homepage exists '''
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_url_available_by_name(self):
+        ''' Verifies the url can be accessed via name '''
+        response = self.client.get(reverse("home"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_template_name_correct(self):
+        ''' Verifies the right template is used '''  
+        response = self.client.get(reverse("home"))
+        self.assertTemplateUsed(response, "index.html")

@@ -11,3 +11,7 @@ django-environ = "*"
 
 [requires]
 python_version = "3.10"
+
+[scripts]
+start = "manage.py runserver"
+test = "manage.py test"
