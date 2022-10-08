@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      DEBUG: ${{ secrets.DEBUG }}
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      uses: VaultVulp/action-pipenv@v2.0.1
+      with:
+        command: install -d 
+
+    - name: Tests
+      uses: VaultVulp/action-pipenv@v2.0.1
+      with:
+        command: run test
+
+    - name: Lint
+      uses: VaultVulp/action-pipenv@v2.0.1
+      with:
+        command: run lint
+
+    - name: Scan
+      uses: VaultVulp/action-pipenv@v2.0.1
+      with:
+        command: run scan
