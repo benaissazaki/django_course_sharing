@@ -15,19 +15,25 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Category',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
-                ('father_category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='courses.category')),
+                ('father_category', models.ForeignKey(blank=True, null=True,
+                 on_delete=django.db.models.deletion.SET_NULL, to='courses.category')),
             ],
         ),
         migrations.CreateModel(
             name='Course',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
-                ('youtube_video', models.URLField(blank=True, max_length=100, null=True)),
-                ('pdf_file', models.FileField(blank=True, null=True, upload_to='courses')),
-                ('category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='courses.category')),
+                ('youtube_video', models.URLField(
+                    blank=True, max_length=100, null=True)),
+                ('pdf_file', models.FileField(
+                    blank=True, null=True, upload_to='courses')),
+                ('category', models.ForeignKey(blank=True, null=True,
+                 on_delete=django.db.models.deletion.SET_NULL, to='courses.category')),
             ],
         ),
     ]
