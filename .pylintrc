@@ -1,0 +1,3 @@
+[MASTER]
+ignore=migrations, apps.py, admin.py
+disable=too-few-public-methods
