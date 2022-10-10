@@ -2,8 +2,10 @@
 ''' Models for the courses app '''
 from django.db import models
 from django.db.models import Q
-from django.core.validators import FileExtensionValidator
+from django.conf import settings
 import regex as re
+
+from courses.validators import PDFFileValidator
 
 
 class Category(models.Model):
@@ -28,7 +30,7 @@ class Course(models.Model):
         upload_to='courses',
         null=True,
         blank=True,
-        validators=[FileExtensionValidator(['pdf'])])
+        validators=[PDFFileValidator(max_size=(1024**2)*settings.MAX_PDF_SIZE_MB)])
 
     class Meta:
         ''' Class defined to add constraints on Course model '''

@@ -132,3 +132,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # To allow PDF embed
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+# Course PDF max size
+MAX_PDF_SIZE_MB = int(env('MAX_PDF_SIZE_MB'))
