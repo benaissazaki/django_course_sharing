@@ -3,6 +3,7 @@
 from django.db import models
 from django.db.models import Q
 from django.core.validators import FileExtensionValidator
+import regex as re
 
 
 class Category(models.Model):
@@ -40,3 +41,19 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_video_id(self):
+        ''' Uses regex to get the youtube video's id '''
+        if self.youtube_video:
+            youtube_id_regex = r'(?<=watch\?v=|/videos/|embed\/|youtu.be\/|\/v\/|watch\?v%3D|%2Fvideos%2F|embed%2F|youtu.be%2F|%2Fv%2F)[^#\&\?\n]*'  # pylint: disable=line-too-long
+            return re.search(youtube_id_regex, self.youtube_video).group(0)
+
+        return None
+
+    def get_video_embed_url(self):
+        ''' Constructs the youtube embed url '''
+        if self.youtube_video:
+            video_id = self.get_video_id()
+            return f"https://www.youtube-nocookie.com/embed/{video_id}?rel=0"
+
+        return None

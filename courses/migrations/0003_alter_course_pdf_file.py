@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='course',
             name='pdf_file',
-            field=models.FileField(blank=True, null=True, upload_to='courses', validators=[django.core.validators.FileExtensionValidator(['pdf'])]),
+            field=models.FileField(blank=True, null=True, upload_to='courses', validators=[
+                                   django.core.validators.FileExtensionValidator(['pdf'])]),
         ),
     ]
