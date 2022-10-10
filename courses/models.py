@@ -19,6 +19,7 @@ class Category(models.Model):
 class Course(models.Model):
     ''' Courses with a youtube video and/or pdf associated '''
     name = models.CharField(max_length=100, unique=True)
+    created_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, blank=True)
     youtube_video = models.URLField(

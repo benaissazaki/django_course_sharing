@@ -5,9 +5,9 @@ from .models import Course
 
 
 class CourseListView(ListView):
-    # TODO: Order
     model = Course
     paginate_by = 10
+    ordering = ['-created_at']
 
 
 class CourseDetailView(DetailView):
