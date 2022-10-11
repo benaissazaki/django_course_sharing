@@ -12,6 +12,13 @@
     </title>
 </head>
 <body>
+    <nav>
+        <ul>
+            <li>
+                <a href="{% url 'course-list' %}">Courses</a>
+            </li>
+        </ul>
+    </nav>
     {% block body_content %}
     {% endblock %}
 </body>
