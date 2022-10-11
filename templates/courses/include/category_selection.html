@@ -1,0 +1,8 @@
+{% for category, sub_categories in hierarchical_categories.items %}
+    <li><a href="{% url 'course-list' %}?category={{ category.name }}">{{ category.name }}</a></li>
+    {% if sub_categories %}
+    <ul>
+        {% include 'courses/include/category_selection.html' with hierarchical_categories=sub_categories %}
+    </ul>
+    {% endif %}
+{% endfor %}

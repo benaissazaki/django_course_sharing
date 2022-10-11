@@ -17,6 +17,35 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def get_hierarchical_categories():
+        ''' Returns categories in hierarchical form as a dict '''
+        categories = Category.objects.all()
+        root_categories = [cat for cat in categories if not cat.father_category]
+
+        def get_children_hierarchy(category: Category):
+            children = category.category_set.all()
+            if not children:
+                return None
+            children_hierarchy = {}
+            for child in children:
+                children_hierarchy[child] = get_children_hierarchy(child)
+            return children_hierarchy
+
+        return {cat: get_children_hierarchy(cat) for cat in root_categories}
+
+    @classmethod
+    def get_category_courses(cls, category):
+        ''' Returns courses belonging to the category or its children '''
+        courses = Course.objects.filter(category=category)
+        children_categories = category.category_set.all()
+        if not children_categories:
+            return courses
+
+        for child in children_categories:
+            courses = courses.union(cls.get_category_courses(child))
+        return courses
+
 
 class Course(models.Model):
     ''' Courses with a youtube video and/or pdf associated '''

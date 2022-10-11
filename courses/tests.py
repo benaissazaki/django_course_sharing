@@ -3,8 +3,9 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.db.utils import IntegrityError
-from .models import Course
+from .models import Category, Course
 
+RANDOM_YT_VIDEO = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 
 class CourseListViewTest(TestCase):
     ''' Tests the CourseListView '''
@@ -24,6 +25,20 @@ class CourseListViewTest(TestCase):
         response = self.client.get(reverse("course-list"))
         self.assertTemplateUsed(response, "courses/course_list.html")
 
+    def test_filtering_by_category(self):
+        ''' Verifies that filtering courses by categories works '''
+        cat1 = Category.objects.create(name='Cat1')
+        cat2 = Category.objects.create(name='Cat2', father_category=cat1)
+        cat3 = Category.objects.create(name='Cat3')
+
+        Course.objects.create(name='Course1', category=cat1, youtube_video=RANDOM_YT_VIDEO)
+        Course.objects.create(name='Course2', category=cat2, youtube_video=RANDOM_YT_VIDEO)
+        Course.objects.create(name='Course3', category=cat3, youtube_video=RANDOM_YT_VIDEO)
+
+        response = self.client.get(f"{reverse('course-list')}?category=Cat1")
+        self.assertContains(response, 'Course1')
+        self.assertContains(response, 'Course2')
+        self.assertNotContains(response, 'Course3')
 
 class CourseDetailViewTest(TestCase):
     ''' Tests the CourseDetailView '''
@@ -56,7 +71,7 @@ class CourseDetailViewTest(TestCase):
         '''
         Course.objects.create(
             name='Random course',
-            youtube_video='https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+            youtube_video=RANDOM_YT_VIDEO)
         response = self.client.get('/course/Random course')
         self.assertNotContains(response, '<embed')
         self.assertContains(response, '<iframe')
@@ -68,7 +83,7 @@ class CourseDetailViewTest(TestCase):
         '''
         Course.objects.create(
             name='Random course',
-            youtube_video='https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            youtube_video=RANDOM_YT_VIDEO,
             pdf_file='test.pdf')
         response = self.client.get('/course/Random course')
         self.assertContains(response, '<embed')
@@ -89,7 +104,7 @@ class CourseModelTest(TestCase):
     def test_can_create_with_video(self):
         ''' Verifies that a course can be created with a video only '''
         Course.objects.create(
-            name='TestCourse', youtube_video='https://www.youtube.com/watch?v=HtSuA80QTyo')
+            name='TestCourse', youtube_video=RANDOM_YT_VIDEO)
 
     def test_can_create_with_pdf(self):
         ''' Verifies that a course can be created with a pdf only '''
