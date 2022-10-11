@@ -7,6 +7,12 @@
 <div id="filters">
     <ul>{% include 'courses/include/category_selection.html' %}</ul>
 </div>
+<div id="search">
+    <form action="." method="get">
+        {{ search_form.as_p }}
+        <button>Search</button>
+    </form>
+</div>
 <ul>
     {% for course in page_obj %}
     <li>

@@ -1,6 +1,7 @@
 # pylint: disable=missing-class-docstring, missing-module-docstring
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from courses.forms import SearchForm
 from .models import Category, Course
 
 
@@ -11,10 +12,12 @@ class CourseListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['hierarchical_categories'] = Category.get_hierarchical_categories()
+        context['search_form'] = SearchForm()
         return context
 
     def get_queryset(self):
         category = self.request.GET.get('category')
+        search_query = self.request.GET.get('query')
         if category:
             try:
                 category_obj = Category.objects.get(name=category)
@@ -22,6 +25,8 @@ class CourseListView(ListView):
             except Category.DoesNotExist:
                 return self.model.objects.none()
 
+        if search_query:
+            return Course.search_courses(search_query).order_by('-created_at')
         return self.model.objects.all().order_by('-created_at')
 
 

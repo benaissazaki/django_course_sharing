@@ -21,7 +21,8 @@ class Category(models.Model):
     def get_hierarchical_categories():
         ''' Returns categories in hierarchical form as a dict '''
         categories = Category.objects.all()
-        root_categories = [cat for cat in categories if not cat.father_category]
+        root_categories = [
+            cat for cat in categories if not cat.father_category]
 
         def get_children_hierarchy(category: Category):
             children = category.category_set.all()
@@ -89,3 +90,23 @@ class Course(models.Model):
             return f"https://www.youtube-nocookie.com/embed/{video_id}?rel=0"
 
         return None
+
+    @classmethod
+    def search_courses(cls, search_query: str):
+        ''' Search for courses whose name or ancestor categories contain search_query '''
+        result_courses = cls.objects.filter(name__icontains=search_query)
+
+        def search_courses_in_category(category: Category):
+            children_categories = category.category_set.all()
+            related_courses = category.course_set.all()
+            for child in children_categories:
+                related_courses = related_courses.union(search_courses_in_category(child))
+
+            return related_courses
+
+        matching_categories = Category.objects.filter(
+            name__icontains=search_query)
+        if matching_categories:
+            for cat in matching_categories:
+                result_courses = result_courses.union(search_courses_in_category(cat))
+        return result_courses

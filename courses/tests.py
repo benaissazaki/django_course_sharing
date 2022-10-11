@@ -10,6 +10,15 @@ RANDOM_YT_VIDEO = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 class CourseListViewTest(TestCase):
     ''' Tests the CourseListView '''
 
+    def setUp(self) -> None:
+        cat1 = Category.objects.create(name='Cat1')
+        cat2 = Category.objects.create(name='Cat2', father_category=cat1)
+        cat3 = Category.objects.create(name='Cat3')
+
+        Course.objects.create(name='Course1', category=cat1, youtube_video=RANDOM_YT_VIDEO)
+        Course.objects.create(name='Course2', category=cat2, youtube_video=RANDOM_YT_VIDEO)
+        Course.objects.create(name='Course3', category=cat3, youtube_video=RANDOM_YT_VIDEO)
+
     def test_url_exists_at_correct_location(self):
         ''' Verifies the view exists '''
         response = self.client.get('/course/')
@@ -27,15 +36,16 @@ class CourseListViewTest(TestCase):
 
     def test_filtering_by_category(self):
         ''' Verifies that filtering courses by categories works '''
-        cat1 = Category.objects.create(name='Cat1')
-        cat2 = Category.objects.create(name='Cat2', father_category=cat1)
-        cat3 = Category.objects.create(name='Cat3')
-
-        Course.objects.create(name='Course1', category=cat1, youtube_video=RANDOM_YT_VIDEO)
-        Course.objects.create(name='Course2', category=cat2, youtube_video=RANDOM_YT_VIDEO)
-        Course.objects.create(name='Course3', category=cat3, youtube_video=RANDOM_YT_VIDEO)
 
         response = self.client.get(f"{reverse('course-list')}?category=Cat1")
+        self.assertContains(response, 'Course1')
+        self.assertContains(response, 'Course2')
+        self.assertNotContains(response, 'Course3')
+
+    def test_searching(self):
+        ''' Verifies that searching for courses by query works '''
+
+        response = self.client.get(f"{reverse('course-list')}?query=cat1")
         self.assertContains(response, 'Course1')
         self.assertContains(response, 'Course2')
         self.assertNotContains(response, 'Course3')
