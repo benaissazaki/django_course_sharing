@@ -16,9 +16,11 @@ class CourseListView(ListView):
     def get_queryset(self):
         category = self.request.GET.get('category')
         if category:
-            category_obj = Category.objects.get(name=category)
-            if category_obj:
+            try:
+                category_obj = Category.objects.get(name=category)
                 return Category.get_category_courses(category_obj).order_by('-created_at')
+            except Category.DoesNotExist:
+                return self.model.objects.none()
 
         return self.model.objects.all().order_by('-created_at')
 
