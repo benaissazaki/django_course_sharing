@@ -10,9 +10,10 @@ regex = "*"
 pypdf2 = "*"
 
 [dev-packages]
-pylint = "*"
+pylint = "==2.14.5"
 autopep8 = "*"
 bandit = "*"
+pylint-django = "*"
 
 [requires]
 python_version = "3.10"

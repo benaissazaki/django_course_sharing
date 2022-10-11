@@ -1,3 +1,5 @@
 [MASTER]
 ignore=migrations, apps.py, admin.py
 disable=too-few-public-methods
+load-plugins=pylint_django
+django-settings-module=courses_catalog.settings
