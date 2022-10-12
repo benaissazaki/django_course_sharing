@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}- Courses{% endblock %}
+
+{% block body_content %}
+<h1>Courses list</h1>
+<div id="filters">
+    <ul>{% include 'courses/include/category_selection.html' %}</ul>
+</div>
+<div id="search">
+    <form action="." method="get">
+        {{ search_form.as_p }}
+        <button>Search</button>
+    </form>
+</div>
+<ul>
+    {% for course in page_obj %}
+    <li>
+        <a href="{% url 'course-detail' course.name %}">
+            <div>
+                <span>{{ course.name }}</span> |
+                <span>{{ course.category }}</span>
+            </div>
+        </a>
+    </li>
+    {% empty %}
+    <div>
+        No course found
+    </div>
+    {% endfor %}
+</ul>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; Premier</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Précédent</a>
+        {% endif %}
+
+        <span class="current">
+            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Suivant</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Dernier &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

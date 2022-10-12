@@ -12,6 +12,7 @@ jobs:
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       DEBUG: ${{ secrets.DEBUG }}
+      MAX_PDF_SIZE_MB: 50
     steps:
     - uses: actions/checkout@v2
 
