@@ -145,3 +145,13 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # Course PDF max size
 MAX_PDF_SIZE_MB = int(env('MAX_PDF_SIZE_MB'))
+
+# Instructs the browser to send a full URL, but only for same-origin links.
+# No referrer will be sent for cross-origin links
+SECURE_REFERRER_POLICY = 'same-origin'
+
+# X-Content-Type-Options: nosniff
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Clickjacking protection
+X_FRAME_OPTIONS = 'DENY'
