@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'axes',
     'courses'
 ]
 
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'axes.middleware.AxesMiddleware'
 ]
 
 ROOT_URLCONF = 'courses_catalog.urls'
@@ -125,6 +127,14 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# axes settings
+AUTHENTICATION_BACKENDS = [
+    # AxesStandaloneBackend should be the first backend in the AUTHENTICATION_BACKENDS list.
+    'axes.backends.AxesStandaloneBackend',
+
+    # Django ModelBackend is the default authentication backend.
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 # Media settings
 MEDIA_URL = '/media/'
@@ -135,3 +145,13 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # Course PDF max size
 MAX_PDF_SIZE_MB = int(env('MAX_PDF_SIZE_MB'))
+
+# Instructs the browser to send a full URL, but only for same-origin links.
+# No referrer will be sent for cross-origin links
+SECURE_REFERRER_POLICY = 'same-origin'
+
+# X-Content-Type-Options: nosniff
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Clickjacking protection
+X_FRAME_OPTIONS = 'DENY'

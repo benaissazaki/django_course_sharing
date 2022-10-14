@@ -8,6 +8,7 @@ django = "*"
 django-environ = "*"
 regex = "*"
 pypdf2 = "*"
+django-axes = "*"
 
 [dev-packages]
 pylint = "==2.14.5"
