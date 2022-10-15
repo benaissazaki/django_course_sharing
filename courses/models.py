@@ -128,7 +128,7 @@ class Exam(models.Model):
                                     PDFFileValidator(
                                         max_size=(1024**2)*settings.MAX_PDF_SIZE_MB)
                                 ])
-
+    created_at = models.DateTimeField(auto_now=True)
     class Meta:
         constraints = [
             models.CheckConstraint(
