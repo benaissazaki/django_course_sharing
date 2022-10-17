@@ -24,4 +24,13 @@
     frameborder="0"></embed>
 {% endif %}
 
+{% if object.exam_set %}
+<h2>Related exams</h2>
+<ul>
+{% for e in object.exam_set.all %}
+    <li><a href="{% url 'exam-detail' e.name %}">{{ e.name }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
 {% endblock %}

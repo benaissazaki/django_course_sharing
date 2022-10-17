@@ -15,4 +15,13 @@
     frameborder="0"></embed>
 {% endif %}
 
+{% if object.related_courses %}
+<h2>Related courses</h2>
+<ul>
+{% for c in object.related_courses.all %}
+    <li><a href="{% url 'course-detail' c.name %}">{{ c.name }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
 {% endblock %}
