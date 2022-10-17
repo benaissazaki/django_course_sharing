@@ -2,8 +2,6 @@
 ''' Models for the courses app '''
 from django.db import models
 from django.db.models import Q
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 from django.conf import settings
 import regex as re
 
@@ -119,32 +117,14 @@ class Course(models.Model):
 class Exam(models.Model):
     ''' Exams with a pdf file associated '''
     name = models.CharField(max_length=100, unique=True)
-    related_course = models.ForeignKey(
-        Course, on_delete=models.SET_NULL, null=True, blank=True)
-    category = models.ForeignKey(
-        Category, on_delete=models.SET_NULL, null=True, blank=True)
+    related_courses = models.ManyToManyField(Course, blank=True)
+    categories = models.ManyToManyField(Category, blank=True)
     pdf_file = models.FileField(upload_to='exams',
                                 validators=[
                                     PDFFileValidator(
                                         max_size=(1024**2)*settings.MAX_PDF_SIZE_MB)
                                 ])
     created_at = models.DateTimeField(auto_now=True)
-    class Meta:
-        constraints = [
-            models.CheckConstraint(
-                check=(
-                    Q(related_course__isnull=False) |
-                    Q(category__isnull=False)
-                ),
-                name='course_or_category'
-            )
-        ]
 
     def __str__(self):
         return self.name
-
-@receiver(pre_save, sender=Exam)
-def set_corresponding_category(sender, instance: Exam, *args, **kwargs): # pylint: disable=unused-argument
-    ''' Set the exam's category to the related_course's '''
-    if instance.related_course:
-        instance.category = instance.related_course.category

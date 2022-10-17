@@ -3,7 +3,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.db.utils import IntegrityError
-from .models import Category, Course, Exam
+from .models import Category, Course
 
 RANDOM_YT_VIDEO = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 
@@ -125,30 +125,3 @@ class CourseModelTest(TestCase):
         ''' Verifies that a course can be created with a pdf only '''
         Course.objects.create(
             name='TestCourse', pdf_file='test.pdf')
-
-
-class ExamModelTest(TestCase):
-    ''' Tests the Exam model '''
-
-    def test_course_or_category(self):
-        '''
-            Verifies that an exception is thrown when creating an exam
-            without a related_course or category
-        '''
-        with self.assertRaises(IntegrityError):
-            Exam.objects.create(name='TestExam')
-
-    def test_can_create_with_category(self):
-        ''' Verifies that an exam can be created with a category only'''
-        category = Category.objects.create(name='TestCategory')
-        Exam.objects.create(category=category)
-
-    def test_can_create_with_course(self):
-        '''
-            Verifies that an exam can be created with a related_course only
-            which sets category to the course's
-        '''
-        course = Course.objects.create(
-            name='TestCourse', pdf_file='test.pdf')
-        exam = Exam.objects.create(name='TestExam', related_course=course)
-        self.assertEqual(exam.category, course.category)
