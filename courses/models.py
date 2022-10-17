@@ -47,6 +47,18 @@ class Category(models.Model):
             courses = courses.union(cls.get_category_courses(child))
         return courses
 
+    @classmethod
+    def get_category_exams(cls, category):
+        ''' Returns exams belonging to the category or its children '''
+        exams = Exam.objects.filter(categories__in=[category])
+        children_categories = category.category_set.all()
+        if not children_categories:
+            return exams
+
+        for child in children_categories:
+            exams = exams.union(cls.get_category_exams(child))
+        return exams
+
 
 class Course(models.Model):
     ''' Courses with a youtube video and/or pdf associated '''
@@ -128,3 +140,26 @@ class Exam(models.Model):
 
     def __str__(self):
         return self.name
+
+
+    @classmethod
+    def search_exams(cls, search_query: str):
+        ''' Search for exams whose name or ancestor categories contain search_query '''
+        result_exams = cls.objects.filter(name__icontains=search_query)
+
+        def search_courses_in_category(category: Category):
+            children_categories = category.category_set.all()
+            related_exams = category.exam_set.all()
+            for child in children_categories:
+                related_exams = related_exams.union(
+                    search_courses_in_category(child))
+
+            return related_exams
+
+        matching_categories = Category.objects.filter(
+            name__icontains=search_query)
+        if matching_categories:
+            for cat in matching_categories:
+                result_exams = result_exams.union(
+                    search_courses_in_category(cat))
+        return result_exams

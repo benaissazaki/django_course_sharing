@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}- {{ object.name }} {% endblock %}
+
+{% block body_content %}
+
+<h1>{{ object.name }}</h1>
+
+{% if object.pdf_file %}
+<embed 
+    width="1280"
+    height="720"
+    type="application/pdf"
+    src="/media/{{ object.pdf_file }}"
+    frameborder="0"></embed>
+{% endif %}
+
+{% endblock %}

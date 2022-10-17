@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}- Courses{% endblock %}
+{% block title %}- Exams{% endblock %}
 
 {% block body_content %}
-<h1>Courses list</h1>
+<h1>Exams list</h1>
 <div id="filters">
-    <ul>{% include 'courses/include/category_selection.html' %}</ul>
+    <ul>{% include 'courses/include/category_selection_exam.html' %}</ul>
 </div>
 <div id="search">
     <form action="." method="get">
@@ -14,18 +14,22 @@
     </form>
 </div>
 <ul>
-    {% for course in page_obj %}
+    {% for exam in page_obj %}
     <li>
-        <a href="{% url 'course-detail' course.name %}">
+        <a href="{% url 'exam-detail' exam.name %}">
             <div>
-                <span>{{ course.name }}</span> |
-                <span>{{ course.category }}</span>
+                <span>{{ exam.name }}</span> |
+                <span>
+                    {% for c in exam.categories.all %}
+                        {{ c.name }}, 
+                    {% endfor %}
+                </span>
             </div>
         </a>
     </li>
     {% empty %}
     <div>
-        No course found
+        No exam found
     </div>
     {% endfor %}
 </ul>
