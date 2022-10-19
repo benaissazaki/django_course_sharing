@@ -1,6 +1,9 @@
 # pylint: disable=missing-class-docstring, missing-module-docstring
+from typing import Any, Optional
 from django.contrib import admin
-from .models import Category, Course
+
+from courses.forms import ExamAdminForm
+from .models import Category, Course, Exam
 
 
 @admin.register(Category)
@@ -12,3 +15,8 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('name', 'category')
+
+@admin.register(Exam)
+class ExamAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    form = ExamAdminForm

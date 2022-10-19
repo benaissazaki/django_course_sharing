@@ -5,15 +5,6 @@
 {% block body_content %}
 
 <h1>{{ object.name }}</h1>
-{% if object.youtube_video %}
-<iframe 
-    width="1280" 
-    height="720" 
-    src="{{ object.get_video_embed_url }}"
-    frameborder="0"
-    allowfullscreen></iframe>
-
-{% endif %}
 
 {% if object.pdf_file %}
 <embed 
@@ -24,11 +15,11 @@
     frameborder="0"></embed>
 {% endif %}
 
-{% if object.exam_set %}
-<h2>Related exams</h2>
+{% if object.related_courses %}
+<h2>Related courses</h2>
 <ul>
-{% for e in object.exam_set.all %}
-    <li><a href="{% url 'exam-detail' e.name %}">{{ e.name }}</a></li>
+{% for c in object.related_courses.all %}
+    <li><a href="{% url 'course-detail' c.name %}">{{ c.name }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}

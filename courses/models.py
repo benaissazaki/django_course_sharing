@@ -47,6 +47,18 @@ class Category(models.Model):
             courses = courses.union(cls.get_category_courses(child))
         return courses
 
+    @classmethod
+    def get_category_exams(cls, category):
+        ''' Returns exams belonging to the category or its children '''
+        exams = Exam.objects.filter(categories__in=[category])
+        children_categories = category.category_set.all()
+        if not children_categories:
+            return exams
+
+        for child in children_categories:
+            exams = exams.union(cls.get_category_exams(child))
+        return exams
+
 
 class Course(models.Model):
     ''' Courses with a youtube video and/or pdf associated '''
@@ -100,7 +112,8 @@ class Course(models.Model):
             children_categories = category.category_set.all()
             related_courses = category.course_set.all()
             for child in children_categories:
-                related_courses = related_courses.union(search_courses_in_category(child))
+                related_courses = related_courses.union(
+                    search_courses_in_category(child))
 
             return related_courses
 
@@ -108,5 +121,45 @@ class Course(models.Model):
             name__icontains=search_query)
         if matching_categories:
             for cat in matching_categories:
-                result_courses = result_courses.union(search_courses_in_category(cat))
+                result_courses = result_courses.union(
+                    search_courses_in_category(cat))
         return result_courses
+
+
+class Exam(models.Model):
+    ''' Exams with a pdf file associated '''
+    name = models.CharField(max_length=100, unique=True)
+    related_courses = models.ManyToManyField(Course, blank=True)
+    categories = models.ManyToManyField(Category, blank=True)
+    pdf_file = models.FileField(upload_to='exams',
+                                validators=[
+                                    PDFFileValidator(
+                                        max_size=(1024**2)*settings.MAX_PDF_SIZE_MB)
+                                ])
+    created_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
+    @classmethod
+    def search_exams(cls, search_query: str):
+        ''' Search for exams whose name or ancestor categories contain search_query '''
+        result_exams = cls.objects.filter(name__icontains=search_query)
+
+        def search_courses_in_category(category: Category):
+            children_categories = category.category_set.all()
+            related_exams = category.exam_set.all()
+            for child in children_categories:
+                related_exams = related_exams.union(
+                    search_courses_in_category(child))
+
+            return related_exams
+
+        matching_categories = Category.objects.filter(
+            name__icontains=search_query)
+        if matching_categories:
+            for cat in matching_categories:
+                result_exams = result_exams.union(
+                    search_courses_in_category(cat))
+        return result_exams

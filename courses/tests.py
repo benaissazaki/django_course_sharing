@@ -7,6 +7,7 @@ from .models import Category, Course
 
 RANDOM_YT_VIDEO = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 
+
 class CourseListViewTest(TestCase):
     ''' Tests the CourseListView '''
 
@@ -15,9 +16,12 @@ class CourseListViewTest(TestCase):
         cat2 = Category.objects.create(name='Cat2', father_category=cat1)
         cat3 = Category.objects.create(name='Cat3')
 
-        Course.objects.create(name='Course1', category=cat1, youtube_video=RANDOM_YT_VIDEO)
-        Course.objects.create(name='Course2', category=cat2, youtube_video=RANDOM_YT_VIDEO)
-        Course.objects.create(name='Course3', category=cat3, youtube_video=RANDOM_YT_VIDEO)
+        Course.objects.create(name='Course1', category=cat1,
+                              youtube_video=RANDOM_YT_VIDEO)
+        Course.objects.create(name='Course2', category=cat2,
+                              youtube_video=RANDOM_YT_VIDEO)
+        Course.objects.create(name='Course3', category=cat3,
+                              youtube_video=RANDOM_YT_VIDEO)
 
     def test_url_exists_at_correct_location(self):
         ''' Verifies the view exists '''
@@ -49,6 +53,7 @@ class CourseListViewTest(TestCase):
         self.assertContains(response, 'Course1')
         self.assertContains(response, 'Course2')
         self.assertNotContains(response, 'Course3')
+
 
 class CourseDetailViewTest(TestCase):
     ''' Tests the CourseDetailView '''
