@@ -16,12 +16,9 @@ class CourseListViewTest(TestCase):
         cat2 = Category.objects.create(name='Cat2', father_category=cat1)
         cat3 = Category.objects.create(name='Cat3')
 
-        Course.objects.create(name='Course1', category=cat1,
-                              youtube_video=RANDOM_YT_VIDEO)
-        Course.objects.create(name='Course2', category=cat2,
-                              youtube_video=RANDOM_YT_VIDEO)
-        Course.objects.create(name='Course3', category=cat3,
-                              youtube_video=RANDOM_YT_VIDEO)
+        Course.objects.create(name='Course1', youtube_video=RANDOM_YT_VIDEO).categories.set([cat1])
+        Course.objects.create(name='Course2', youtube_video=RANDOM_YT_VIDEO).categories.set([cat2])
+        Course.objects.create(name='Course3', youtube_video=RANDOM_YT_VIDEO).categories.set([cat3])
 
     def test_url_exists_at_correct_location(self):
         ''' Verifies the view exists '''

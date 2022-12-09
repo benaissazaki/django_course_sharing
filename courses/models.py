@@ -38,7 +38,7 @@ class Category(models.Model):
     @classmethod
     def get_category_courses(cls, category):
         ''' Returns courses belonging to the category or its children '''
-        courses = Course.objects.filter(category=category)
+        courses = Course.objects.filter(categories__in=[category])
         children_categories = category.category_set.all()
         if not children_categories:
             return courses
@@ -64,8 +64,7 @@ class Course(models.Model):
     ''' Courses with a youtube video and/or pdf associated '''
     name = models.CharField(max_length=100, unique=True)
     created_at = models.DateTimeField(auto_now=True)
-    category = models.ForeignKey(
-        Category, on_delete=models.SET_NULL, null=True, blank=True)
+    categories = models.ManyToManyField(Category, blank=True)
     youtube_video = models.URLField(
         max_length=100, null=True, blank=True)
     pdf_file = models.FileField(
@@ -77,7 +76,7 @@ class Course(models.Model):
     class Meta:
         ''' Class defined to add constraints on Course model '''
         constraints = [
-            models.CheckConstraint(
+            models.CheckConstraint( # Check if there is at least a video or a pdf
                 check=Q(youtube_video__isnull=False) | ~Q(
                     pdf_file__exact=''),
                 name='video-or-pdf'
@@ -147,12 +146,12 @@ class Exam(models.Model):
         ''' Search for exams whose name or ancestor categories contain search_query '''
         result_exams = cls.objects.filter(name__icontains=search_query)
 
-        def search_courses_in_category(category: Category):
+        def search_exams_in_category(category: Category):
             children_categories = category.category_set.all()
             related_exams = category.exam_set.all()
             for child in children_categories:
                 related_exams = related_exams.union(
-                    search_courses_in_category(child))
+                    search_exams_in_category(child))
 
             return related_exams
 
@@ -161,5 +160,5 @@ class Exam(models.Model):
         if matching_categories:
             for cat in matching_categories:
                 result_exams = result_exams.union(
-                    search_courses_in_category(cat))
+                    search_exams_in_category(cat))
         return result_exams
