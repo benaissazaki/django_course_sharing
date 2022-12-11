@@ -20,23 +20,18 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.10'
+        
+    - name: Install Pipenv
+      run: pip install pipenv
 
     - name: Install dependencies
-      uses: VaultVulp/action-pipenv@v2.0.1
-      with:
-        command: install -d 
+      run:  python -m pipenv install -d 
 
     - name: Tests
-      uses: VaultVulp/action-pipenv@v2.0.1
-      with:
-        command: run test
+      run:  python -m pipenv run test
 
     - name: Lint
-      uses: VaultVulp/action-pipenv@v2.0.1
-      with:
-        command: run lint
+      run:  python -m pipenv run lint
 
     - name: Scan
-      uses: VaultVulp/action-pipenv@v2.0.1
-      with:
-        command: run scan
+      run:  python -m pipenv run scan
