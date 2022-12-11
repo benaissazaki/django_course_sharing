@@ -18,10 +18,13 @@
     <li>
         <a href="{% url 'exam-detail' exam.name %}">
             <div>
-                <span>{{ exam.name }}</span> |
+                <span>{{ exam.name }}</span>
+                {% if exam.categories.all %}
+                    |
+                {% endif %}
                 <span>
                     {% for c in exam.categories.all %}
-                        {{ c.name }}, 
+                        {{ c.name }}{% if not forloop.last %},{% endif %}
                     {% endfor %}
                 </span>
             </div>

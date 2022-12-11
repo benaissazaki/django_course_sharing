@@ -18,8 +18,15 @@
     <li>
         <a href="{% url 'course-detail' course.name %}">
             <div>
-                <span>{{ course.name }}</span> |
-                <span>{{ course.category }}</span>
+                <span>{{ course.name }}</span>
+                {% if course.categories.all %}
+                    |
+                {% endif %}
+                <span>
+                    {% for c in course.categories.all %}
+                        {{ c.name }}{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                </span>
             </div>
         </a>
     </li>

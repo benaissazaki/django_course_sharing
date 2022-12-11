@@ -14,7 +14,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category')
+    list_display = ('name',)
 
 @admin.register(Exam)
 class ExamAdmin(admin.ModelAdmin):
