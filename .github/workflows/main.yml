@@ -19,17 +19,22 @@ jobs:
       with:
         python-version: '3.10'
               
-    - name: Install Pipenv
-      run: pip install pipenv
-
     - name: Install dependencies
-      run:  python -V & python -m pipenv install -d 
+      uses: VaultVulp/action-pipenv@v2.0.1
+      with:
+        command: install -d 
 
     - name: Tests
-      run:  python -m pipenv run test
+      uses: VaultVulp/action-pipenv@v2.0.1
+      with:
+        command: run test
 
     - name: Lint
-      run:  python -m pipenv run lint
+      uses: VaultVulp/action-pipenv@v2.0.1
+      with:
+        command: run lint
 
     - name: Scan
-      run:  python -m pipenv run scan
+      uses: VaultVulp/action-pipenv@v2.0.1
+      with:
+        command: run scan
