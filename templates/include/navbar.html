@@ -2,22 +2,22 @@
 <link rel="stylesheet" href="{% static 'style/navbar.css' %}">
 <header id="navbar">
     <nav class="navbar-container container">
-      <a href="/" class="home-link">
-        <div class="navbar-logo"></div>
-        Courses catalog
-      </a>
-      <button type="button" class="navbar-toggle" aria-label="Toggle menu" aria-expanded="false"
-        aria-controls="navbar-menu">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <div id="navbar-menu" class="detached">
-        <ul class="navbar-links">
-          <li class="navbar-item"><a class="navbar-link" href="{% url 'home' %}">Home</a></li>
-          <li class="navbar-item"><a class="navbar-link" href="{% url 'course-list' %}">Courses</a></li>
-          <li class="navbar-item"><a class="navbar-link" href="{% url 'exam-list' %}">Exams</a></li>
-        </ul>
-      </div>
+        <a href="/" class="home-link">
+            <div class="navbar-logo"></div>
+            Courses catalog
+        </a>
+        <button type="button" class="navbar-toggle" aria-label="Toggle menu" aria-expanded="false"
+            aria-controls="navbar-menu">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <div id="navbar-menu" class="detached">
+            <ul class="navbar-links">
+                <li class="navbar-item"><a class="navbar-link" href="{% url 'home' %}">Home</a></li>
+                <li class="navbar-item"><a class="navbar-link" href="{% url 'course-list' %}">Courses</a></li>
+                <li class="navbar-item"><a class="navbar-link" href="{% url 'exam-list' %}">Exams</a></li>
+            </ul>
+        </div>
     </nav>
-  </header>
+</header>
