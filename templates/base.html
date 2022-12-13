@@ -1,31 +1,48 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% block head_content %}
-    {% endblock %}
-    <title>
-        Courses catalog
-        {% block title %}{% endblock %}
-    </title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'style/navbar.css' %}">
+  <link rel="stylesheet" href="{% static 'style/base.css' %}">
+  {% block head_content %}
+  {% endblock %}
+  <title>
+    Courses catalog
+    {% block title %}{% endblock %}
+  </title>
 </head>
+
 <body>
-    <nav>
-        <ul>
-            <li>
-                <a href="{% url 'home' %}">Home</a>
-            </li>
-            <li>
-                <a href="{% url 'course-list' %}">Courses</a>
-            </li>
-            <li>
-                <a href="{% url 'exam-list' %}">Exams</a>
-            </li>
+  <header id="navbar">
+    <nav class="navbar-container container">
+      <a href="/" class="home-link">
+        <div class="navbar-logo"></div>
+        Courses catalog
+      </a>
+      <button type="button" class="navbar-toggle" aria-label="Toggle menu" aria-expanded="false"
+        aria-controls="navbar-menu">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <div id="navbar-menu" class="detached">
+        <ul class="navbar-links">
+          <li class="navbar-item"><a class="navbar-link" href="{% url 'home' %}">Home</a></li>
+          <li class="navbar-item"><a class="navbar-link" href="{% url 'course-list' %}">Courses</a></li>
+          <li class="navbar-item"><a class="navbar-link" href="{% url 'exam-list' %}">Exams</a></li>
         </ul>
+      </div>
     </nav>
+  </header>
+  <script src="{% static 'js/navbar.js' %}"></script>
+  <main>
     {% block body_content %}
     {% endblock %}
+  </main>
 </body>
+
 </html>
