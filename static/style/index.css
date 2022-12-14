@@ -1,0 +1,11 @@
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    text-transform: uppercase;
+    font-size: 68px;
+    font-weight: 100;
+}

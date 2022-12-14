@@ -19,6 +19,7 @@ body {
 
 main {
     margin-top: var(--navbar-height);
+    min-height: calc(100vh - var(--navbar-height));
 }
 
 .container {
