@@ -1,27 +1,31 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
+{% block head_content %}
+<link rel="stylesheet" href="{% static 'style/detail.css' %}">
+{% endblock %}
+
 {% block title %}- {{ object.name }} {% endblock %}
 
 {% block body_content %}
 
-<h1>{{ object.name }}</h1>
+<div class="container">
+    <h1>{{ object.name }}</h1>
 
-{% if object.pdf_file %}
-<embed 
-    width="1280"
-    height="720"
-    type="application/pdf"
-    src="/media/{{ object.pdf_file }}"
-    frameborder="0"></embed>
-{% endif %}
+    {% if object.pdf_file %}
+    <embed width="100%" height="500" type="application/pdf" src="/media/{{ object.pdf_file }}" frameborder="0"></embed>
+    {% endif %}
 
-{% if object.related_courses %}
-<h2>Related courses</h2>
-<ul>
-{% for c in object.related_courses.all %}
-    <li><a href="{% url 'course-detail' c.name %}">{{ c.name }}</a></li>
-{% endfor %}
-</ul>
-{% endif %}
+    {% if object.related_courses %}
+    <h2>Related courses</h2>
+    <ul class="related">
+        {% for c in object.related_courses.all %}
+        <li><a href="{% url 'course-detail' c.name %}">{{ c.name }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
 
 {% endblock %}

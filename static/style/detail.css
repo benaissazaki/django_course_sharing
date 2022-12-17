@@ -1,0 +1,22 @@
+h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    margin-top: 80px;
+}
+
+h2 {
+    margin-top: 25px;
+}
+
+.related {
+    list-style-type: none;
+}
+
+.related a {
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.related a:hover {
+    text-decoration: underline;
+}
