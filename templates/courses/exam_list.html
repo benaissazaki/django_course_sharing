@@ -1,57 +1,77 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
+{% block head_content %}
+<link rel="stylesheet" href="{% static 'style/list.css' %}">
+{% endblock %}
+
 {% block title %}- Exams{% endblock %}
 
 {% block body_content %}
-<h1>Exams list</h1>
-<div id="filters">
-    <ul>{% include 'courses/include/category_selection_exam.html' %}</ul>
-</div>
-<div id="search">
-    <form action="." method="get">
-        {{ search_form.as_p }}
-        <button>Search</button>
-    </form>
-</div>
-<ul>
-    {% for exam in page_obj %}
-    <li>
-        <a href="{% url 'exam-detail' exam.name %}">
-            <div>
-                <span>{{ exam.name }}</span>
-                {% if exam.categories.all %}
-                    |
-                {% endif %}
-                <span>
-                    {% for c in exam.categories.all %}
-                        {{ c.name }}{% if not forloop.last %},{% endif %}
-                    {% endfor %}
-                </span>
+<div class="container">
+    <h1>Exams list</h1>
+    <div class="row">
+        <aside class="filter">
+            <div class="category-filter">
+                <h2>Category:</h2>
+                <ul>{% include 'courses/include/category_selection_exam.html' %}</ul>
             </div>
-        </a>
-    </li>
-    {% empty %}
-    <div>
-        No exam found
+            <div class="search">
+                <form action="." method="get">
+                    <div class="search-group">
+                        {{ search_form.query }}
+                        <button>
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </aside>
+        <div class="content">
+            {% for exam in page_obj %}
+            <article>
+                <a href="{% url 'exam-detail' exam.name %}">{{ exam.name }}</a>
+                <div class="categories">
+                    {% for c in exam.categories.all %}
+                    <span class="category">
+                        {{ c.name }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </article>
+            {% empty %}
+            <div>
+                No exam found
+            </div>
+            {% endfor %}
+        </div>
     </div>
-    {% endfor %}
-</ul>
 
-<div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-        <a href="?page=1">&laquo; First</a>
-        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        {% endif %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+            <a href="?page=1">
+                <i class="fa-solid fa-angles-left"></i>
+            </a>
+            <a href="?page={{ page_obj.previous_page_number }}">
+                <i class="fa-solid fa-angle-left"></i>
+            </a>
+            {% endif %}
 
-        <span class="current">
-            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+            <span class="current">
+                {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">
+                <i class="fa-solid fa-angle-right"></i>
+            </a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">
+                <i class="fa-solid fa-angles-right"></i>
+            </a>
+            {% endif %}
         </span>
-
-        {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">Next</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
-        {% endif %}
-    </span>
+    </div>
 </div>
 {% endblock %}

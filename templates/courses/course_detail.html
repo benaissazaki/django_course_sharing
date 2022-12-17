@@ -1,36 +1,37 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
+{% block head_content %}
+<link rel="stylesheet" href="{% static 'style/detail.css' %}">
+{% endblock %}
+
 {% block title %}- {{ object.name }} {% endblock %}
 
 {% block body_content %}
 
-<h1>{{ object.name }}</h1>
-{% if object.youtube_video %}
-<iframe 
-    width="1280" 
-    height="720" 
-    src="{{ object.get_video_embed_url }}"
-    frameborder="0"
-    allowfullscreen></iframe>
+<div class="container">
+    <h1>{{ object.name }}</h1>
+    
+    {% if object.youtube_video %}
+    <h2>Video course:</h2>
+    <iframe width="100%" height="500" src="{{ object.get_video_embed_url }}" frameborder="0" allowfullscreen></iframe>
+    {% endif %}
 
-{% endif %}
+    {% if object.pdf_file %}
+    <h2>PDF course:</h2>
+    <embed width="100%" height="500" type="application/pdf" src="/media/{{ object.pdf_file }}" frameborder="0"></embed>
+    {% endif %}
 
-{% if object.pdf_file %}
-<embed 
-    width="1280"
-    height="720"
-    type="application/pdf"
-    src="/media/{{ object.pdf_file }}"
-    frameborder="0"></embed>
-{% endif %}
+    {% if object.exam_set.all %}
+    <h2>Related exams:</h2>
+    <ul class="related">
+        {% for e in object.exam_set.all %}
+        <li><a href="{% url 'exam-detail' e.name %}">{{ e.name }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
 
-{% if object.exam_set %}
-<h2>Related exams</h2>
-<ul>
-{% for e in object.exam_set.all %}
-    <li><a href="{% url 'exam-detail' e.name %}">{{ e.name }}</a></li>
-{% endfor %}
-</ul>
-{% endif %}
 
 {% endblock %}

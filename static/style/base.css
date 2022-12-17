@@ -19,6 +19,7 @@ body {
 
 main {
     margin-top: var(--navbar-height);
+    min-height: calc(100vh - var(--navbar-height));
 }
 
 .container {
@@ -27,4 +28,8 @@ main {
     padding-right: 1.4rem;
     margin-left: auto;
     margin-right: auto;
+}
+
+.row {
+    display: flex;
 }
