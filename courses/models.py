@@ -14,6 +14,9 @@ class Category(models.Model):
     father_category = models.ForeignKey(
         'self', on_delete=models.SET_NULL, null=True, blank=True)
 
+    class Meta:
+        verbose_name_plural = 'categories'
+
     def __str__(self):
         return self.name
 
