@@ -9,7 +9,7 @@ from courses.validators import PDFFileValidator
 
 
 class Category(models.Model):
-    ''' The hierarchical categories to which a course belongs '''
+    ''' The hierarchical categories to which a course or exam belongs '''
     name = models.CharField(max_length=100, unique=True)
     father_category = models.ForeignKey(
         'self', on_delete=models.SET_NULL, null=True, blank=True)
@@ -25,6 +25,7 @@ class Category(models.Model):
             cat for cat in categories if not cat.father_category]
 
         def get_children_hierarchy(category: Category):
+            ''' Returns a category's child categories in hierarchical form as a dict '''
             children = category.category_set.all()
             if not children:
                 return None
@@ -37,7 +38,7 @@ class Category(models.Model):
 
     @classmethod
     def get_category_courses(cls, category):
-        ''' Returns courses belonging to the category or its children '''
+        ''' Returns courses belonging to the given category or its children '''
         courses = Course.objects.filter(categories__in=[category])
         children_categories = category.category_set.all()
         if not children_categories:
@@ -49,7 +50,7 @@ class Category(models.Model):
 
     @classmethod
     def get_category_exams(cls, category):
-        ''' Returns exams belonging to the category or its children '''
+        ''' Returns exams belonging to the given category or its children '''
         exams = Exam.objects.filter(categories__in=[category])
         children_categories = category.category_set.all()
         if not children_categories:

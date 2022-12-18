@@ -131,7 +131,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# axes settings
+# django-axes settings
 AUTHENTICATION_BACKENDS = [
     # AxesStandaloneBackend should be the first backend in the AUTHENTICATION_BACKENDS list.
     'axes.backends.AxesStandaloneBackend',
