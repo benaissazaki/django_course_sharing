@@ -9,6 +9,7 @@ django-environ = "*"
 regex = "*"
 pypdf2 = "*"
 django-axes = "*"
+channels = {extras = ["daphne"], version = "*"}
 
 [dev-packages]
 pylint = "==2.14.5"
