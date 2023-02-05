@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block head_content %}
+{% endblock %}
+
+{% block title %}- Chat{% endblock %}
+
+{% block body_content %}
+<h1>Welcome !</h1>
+
+<script>
+    const socket = new WebSocket("ws://{{ request.get_host }}/chat/");
+    socket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        console.log(data);
+    };
+    socket.onclose = function (e) {
+        console.error("Chat socket closed unexpectedly");
+    };
+    function sendMessage() {
+        const message = document.getElementById("chat-message-input").value;
+        socket.send(JSON.stringify({
+            message: message
+        }));
+    }
+</script>
+
+<input id="chat-message-input" type="text">
+<button onclick="sendMessage()">Send</button>
+{% endblock %}

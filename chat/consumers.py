@@ -56,6 +56,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     async def chat_message(self, event):
+        ''' Send a reply to the received chat message '''
         message = event['message']
         sender = event['sender']
 
@@ -65,9 +66,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         }))
 
     def get_superuser(self):
+        ''' Get superuser from database  '''
         return get_user_model().objects.filter(
             is_superuser=True).first()
 
     def new_message(self, message):
+        ''' Create new message in database '''
         ChatMessage.objects.create(
             sender=self.sender, receiver=self.receiver, message=message)
