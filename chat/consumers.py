@@ -1,8 +1,10 @@
 ''' Django Channels consumers '''
 import json
 
-from django.conf import settings
+from django.contrib.auth import get_user_model
+
 from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.db import database_sync_to_async
 
 from .models import ChatMessage
 
@@ -14,8 +16,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         self.sender = self.scope['user']
-        self.receiver = settings.AUTH_USER_MODEL.objects.filter(
-            is_superuser=True).first()
+        self.receiver = await database_sync_to_async(self.get_superuser)()
 
         if not self.sender.is_authenticated:
             await self.close()
@@ -43,8 +44,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
 
-        ChatMessage.objects.create(
-            sender=self.sender, receiver=self.receiver, message=message)
+        await database_sync_to_async(self.new_message)(message=message)
 
         await self.channel_layer.group_send(
             f"chat-{self.sender.id}-{self.receiver.id}",
@@ -63,3 +63,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'message': message,
             'sender': sender
         }))
+
+    def get_superuser(self):
+        return get_user_model().objects.filter(
+            is_superuser=True).first()
+
+    def new_message(self, message):
+        ChatMessage.objects.create(
+            sender=self.sender, receiver=self.receiver, message=message)

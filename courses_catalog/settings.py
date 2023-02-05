@@ -161,3 +161,11 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Clickjacking protection
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+
+# Channels
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
