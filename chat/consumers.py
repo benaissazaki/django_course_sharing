@@ -16,9 +16,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         self.sender = self.scope['user']
-        self.receiver = await database_sync_to_async(self.get_superuser)()
+        if self.sender.is_superuser:
+            receiver_id = self.scope['url_route']['kwargs']['user_id']
+            self.receiver = await database_sync_to_async(self.get_user)(user_id=receiver_id)
+        else:
+            self.receiver = await database_sync_to_async(self.get_superuser)()
 
-        if not self.sender.is_authenticated:
+        if not self.sender.is_authenticated or not self.receiver:
             await self.close()
             return
 
@@ -74,3 +78,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         ''' Create new message in database '''
         ChatMessage.objects.create(
             sender=self.sender, receiver=self.receiver, message=message)
+
+    def get_user(self, user_id):
+        ''' Get a user from the db by its id '''
+        return get_user_model().objects.get(id=user_id)

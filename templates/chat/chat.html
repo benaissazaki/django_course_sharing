@@ -8,8 +8,9 @@
 {% block body_content %}
 <h1>Welcome !</h1>
 
+{% if user.is_superuser %}
 <script>
-    const socket = new WebSocket("ws://{{ request.get_host }}/chat/");
+    const socket = new WebSocket("ws://{{ request.get_host }}/chat/2");
     socket.onmessage = function (e) {
         const data = JSON.parse(e.data);
         console.log(data);
@@ -24,6 +25,25 @@
         }));
     }
 </script>
+
+{% else %}
+<script>
+    const socket = new WebSocket("ws://{{ request.get_host }}/chat");
+    socket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        console.log(data);
+    };
+    socket.onclose = function (e) {
+        console.error("Chat socket closed unexpectedly");
+    };
+    function sendMessage() {
+        const message = document.getElementById("chat-message-input").value;
+        socket.send(JSON.stringify({
+            message: message
+        }));
+    }
+</script>
+{% endif %}
 
 <input id="chat-message-input" type="text">
 <button onclick="sendMessage()">Send</button>
