@@ -7,22 +7,33 @@ from .models import ChatMessage
 
 User = get_user_model()
 
+admin = User.objects.get(is_superuser=True).id
 
 @login_required
 def chat_view(request, user_id):
     ''' Render chat template '''
-    previous_messages = ChatMessage.objects\
-        .filter(
-            Q(sender=request.user, receiver=user_id) |
-            Q(sender=user_id, receiver=request.user)
-        ) \
-        .order_by('timestamp')
+    if request.user.is_superuser:
+        previous_messages = ChatMessage.objects\
+            .filter(
+                Q(sender=request.user, receiver=user_id) |
+                Q(sender=user_id, receiver=request.user)
+            ) \
+            .order_by('timestamp')
+
+    else:
+        previous_messages = ChatMessage.objects\
+            .filter(
+                Q(sender=request.user, receiver=admin) |
+                Q(sender=admin, receiver=request.user)
+            ) \
+            .order_by('timestamp')
+
     return render(request,
                   'chat/chat.html',
                   {'user_id': user_id, 'previous_messages': previous_messages})
 
 
-@user_passes_test(lambda user: user.is_superuser)
+@user_passes_test(lambda user: user.is_superuser, 'chat-with-admin')
 def chat_list_view(request):
     '''
         Renders a template showing links to multiple chats.
