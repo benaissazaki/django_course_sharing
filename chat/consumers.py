@@ -50,6 +50,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await database_sync_to_async(self.new_message)(message=message)
 
+        await self.channel_layer.group_send(
+            f"chat-{self.sender.id}-{self.receiver.id}",
+            {
+                "type": "chat_message",
+                "message": message,
+                "sender": self.sender.username
+            }
+        )
+
     async def chat_message(self, event):
         ''' Send a reply to the received chat message '''
         message = event['message']
