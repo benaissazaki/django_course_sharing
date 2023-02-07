@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block head_content %}
 {% endblock %}
@@ -7,53 +8,6 @@
 
 {% block body_content %}
 <h1>Welcome !</h1>
-
-<script>
-    let currentUserName = "{{ request.user }}"
-    function insertMessage(message) {
-        const messages_list = document.getElementById('previous-messages-list');
-        messages_list.insertAdjacentHTML('beforeend', `<li><b>${message.sender}:</b>${message.message}</li>`)
-    }
-</script>
-
-{% if user.is_superuser %}
-<script>
-    const socket = new WebSocket("ws://{{ request.get_host }}/chat/{{ user_id }}");
-    socket.onmessage = function (e) {
-        const data = JSON.parse(e.data);
-        insertMessage(data);
-    };
-    socket.onclose = function (e) {
-        console.error("Chat socket closed unexpectedly");
-    };
-    function sendMessage() {
-        const message = document.getElementById("chat-message-input").value;
-        socket.send(JSON.stringify({
-            message: message
-        }));
-        insertMessage({ sender: currentUserName, message });
-    }
-</script>
-
-{% else %}
-<script>
-    const socket = new WebSocket("ws://{{ request.get_host }}/chat");
-    socket.onmessage = function (e) {
-        const data = JSON.parse(e.data);
-        console.log(data);
-    };
-    socket.onclose = function (e) {
-        console.error("Chat socket closed unexpectedly");
-    };
-    function sendMessage() {
-        const message = document.getElementById("chat-message-input").value;
-        socket.send(JSON.stringify({
-            message: message
-        }));
-    }
-</script>
-{% endif %}
-
 <div class="previous-messages">
     <ul id="previous-messages-list">
         {% for message in previous_messages %}
