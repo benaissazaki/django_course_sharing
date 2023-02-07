@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_content %}
+
+{% endblock %}
+
+{% block title %}- User chat{% endblock %}
+
+{% block body_content %}
+
+{% for sender in senders %}
+<div class="chat-item">
+    <h2>
+        <a href="{% url 'chat' sender.sender.id %}">
+            {{ sender.sender }}
+        </a>
+    </h2>
+    <p>
+        {{ sender.last_message }}
+    </p>
+</div>
+<hr>
+{% endfor %}
+
+{% endblock %}
