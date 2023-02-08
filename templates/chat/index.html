@@ -2,13 +2,15 @@
 {% load static %}
 
 {% block head_content %}
-
+<link rel="stylesheet" href="{% static 'style/chat/index.css' %}">
 {% endblock %}
 
 {% block title %}- User chat{% endblock %}
 
 {% block body_content %}
+<h1>User chat</h1>
 
+<section class="chat-list">
 {% for sender in senders %}
 <div class="chat-item">
     <h2>
@@ -20,7 +22,7 @@
         {{ sender.last_message }}
     </p>
 </div>
-<hr>
 {% endfor %}
+</section>
 
 {% endblock %}
