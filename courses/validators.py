@@ -3,7 +3,7 @@
 from django.utils.deconstruct import deconstructible
 from django.template.defaultfilters import filesizeformat
 from django.core.exceptions import ValidationError
-import PyPDF2
+import pypdf
 
 @deconstructible
 class PDFFileValidator():
@@ -27,7 +27,7 @@ class PDFFileValidator():
                                   'max_size', params)
 
         try:
-            PyPDF2.PdfFileReader(data)
+            pypdf.PdfReader(data)
         except Exception as exc:
             raise ValidationError(self.error_messages['content_type'],
                                   'content_type') from exc
