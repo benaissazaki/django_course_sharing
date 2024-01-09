@@ -10,8 +10,8 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     env:
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      DEBUG: ${{ secrets.DEBUG }}
+      SECRET_KEY: xgxk#hz#ot=)$#+(j#yj71ewzogr_de9kd$s&@f)hg6lkhr(^n
+      DEBUG: True
       MAX_PDF_SIZE_MB: 50
     steps:
     - uses: actions/checkout@v2
